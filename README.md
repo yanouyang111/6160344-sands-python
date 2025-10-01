@@ -1,9 +1,14 @@
-#Introduction
+# Signal Generator and Modifier
 
-This repository contains scripts to create signals and modify them.
+This project contains scripts to generate, visualize, and manipulate basic signals.
 
-#Contents of the project
+## How to run
 
-Generate signals
-Perform operations on signals and plot them
-Compute and plot Fourier series and Fourier transform of signals 
+To run the project, you should have Python and the following packages:
+
+- numpy
+- matplotlib
+
+Then execute:
+```bash
+python run.py
