@@ -36,9 +36,9 @@ def generate_unit_step(duration, sample_rate, step_time=0):
     y = []
     for ti in t:
         if ti >= step_time:
-        y.append(1.0)
+            y.append(1.0)
         else:
-        y.append(0.0)
+            y.append(0.0)
     y = np.array(y)
     return t, y
         
