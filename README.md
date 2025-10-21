@@ -12,6 +12,6 @@ To run the project, you should have Python and the following packages:
 Then execute:
 ```bash
 python run.py
-
+```
 ## Results of the pytest 
 ![image](/pytest_results.png)
