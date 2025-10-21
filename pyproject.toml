@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my-package"
+version = "0.1.0"
+description = "A simple package that generates, visualize and manipulates basic signals."
+authors = [ 
+    {name = "Yan Ouyang", email = "yanouyang@tudelft.nl"},
+]
+dependencies = ["numpy>=1.0", "pandas>=1.0", "matplotlib==3.0.2"]
