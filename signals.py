@@ -1,149 +1,84 @@
 import numpy as np
 
-# Signal Generators 
+# Signal generators 
 
-def generate_sine_wave(frequency, duration, sample_rate, amplitude=1.0, phase=0.0):
+def generate_sine_wave(frequency, duration, sample_rate, amplitude=0.8, phase=0.5):
     """
     Create a sine wave signal.
 
-    Args:
-        frequency (float): Frequency in Hz.
-        duration (float): Duration in seconds.
-        sample_rate (int): Sampling rate in Hz.
-        amplitude (float): Amplitude (default 1.0).
-        phase (float): Phase in radians (default 0.0).
+    Parameters:
+        frequency: freqeuncy in Hz.
+        duration: duration in seconds.
+        sample_rate: sampling rate in Hz.
+        amplitude: amplitude (default 0.8).
+        phase: phase in radians (default 0.5).
 
     Returns:
-        t (ndarray): Time values.
-        y (ndarray): Sine wave values.
+        t: time values.
+        y: sine wave values.
     """
     n = int(sample_rate * duration)
     t = np.linspace(0, duration, n, endpoint=False)
     y = amplitude * np.sin(2 * np.pi * frequency * t + phase)
     return t, y
 
-
-def generate_unit_step(duration, sample_rate, step_time=0.0):
+def generate_unit_step(duration, sample_rate, step_time=0.7):
     """
-    Create a unit step signal u(t - step_time).
+    Create a unit step signal from step_time=0.7.
 
-    Args:
-        duration (float): Duration in seconds.
-        sample_rate (int): Sampling rate in Hz.
-        step_time (float): Step position in seconds.
+    Parameters:
+        duration: duration in seconds.
+        sample_rate: sampling rate in Hz.
+        step_time: step positon in seconds.
 
     Returns:
-        t (ndarray): Time values.
-        y (ndarray): Step signal (0 or 1).
+        t: time values.
+        y: step signal (0 or 1).
     """
     n = int(sample_rate * duration)
     t = np.linspace(0, duration, n, endpoint=False)
-    y = np.where(t >= step_time, 1.0, 0.0)
-    return t, y
+    y = []
+    for i in range(len(t)):
+        if t[i]>=step_time:
+            y.append(1.0)
+        else:
+            y.append(0.0)
+    return t, np.array(y)
 
-
-# Signal Operations
+# Signal operations
 
 def time_shift(t, y, shift):
     """
     Shift the signal in time.
 
-    Args:
-        t (ndarray): Original time.
-        y (ndarray): Original signal.
-        shift (float): Time shift in seconds (positive = delay).
+    parameters:
+        t: original time.
+        y: original signal.
+        shift: time shift in secods.
 
     Returns:
-        t_shifted (ndarray): Shifted time.
-        y (ndarray): Same signal values.
+        t_shifted: shifted time.
+        y: same signal values.
     """
-    return t + shift, y
+    t2 = []
+    for i in range(len(t)):
+        t2.append(t[i]+shift)
+    return np.array(t2),y
 
-
-def time_scale(t, y, alpha):
+def time_scale(t, y, alpha=1.0):
     """
-    Scale the signal in time.
+    scale the signal in time.
 
-    Args:
-        t (ndarray): Original time.
-        y (ndarray): Original signal.
-        alpha (float): Scale factor (t_new = alpha * t).
-                       alpha < 1 → stretch, alpha > 1 → compress.
-
+    parameters:
+        t: original time.
+        y: original signal.
+        alpha: scale facter (default 1.0)
+        
     Returns:
-        t_scaled (ndarray): Scaled time.
-        y (ndarray): Same signal values.
+        t_scaled: scaled time.
+        y: same signal values.
     """
-    return alpha * t, y
-
-
-# Fourier Series
-
-def fourier_series_basic(y, t, period, M):
-    """
-    Compute basic Fourier series coefficients numerically.
-
-    Args:
-        y (ndarray): Samples over one period [0, T).
-        t (ndarray): Time samples.
-        period (float): Fundamental period T.
-        M (int): Number of harmonics.
-
-    Returns:
-        a0 (float): Constant term.
-        an (ndarray): Cosine coefficients.
-        bn (ndarray): Sine coefficients.
-    """
-    N = len(t)
-    w0 = 2 * np.pi / period
-    a0 = (2.0 / N) * np.sum(y)
-    an = np.zeros(M)
-    bn = np.zeros(M)
-    for n in range(1, M + 1):
-        an[n-1] = (2.0 / N) * np.sum(y * np.cos(n * w0 * t))
-        bn[n-1] = (2.0 / N) * np.sum(y * np.sin(n * w0 * t))
-    return a0, an, bn
-
-
-def fs_reconstruct_basic(t, period, a0, an, bn):
-    """
-    Reconstruct signal from Fourier series coefficients.
-
-    Args:
-        t (ndarray): Time array.
-        period (float): Fundamental period T.
-        a0, an, bn: Coefficients from fourier_series_basic().
-
-    Returns:
-        yM (ndarray): Reconstructed signal.
-    """
-    w0 = 2 * np.pi / period
-    yM = 0.5 * a0 * np.ones_like(t)
-    for n in range(1, len(an) + 1):
-        yM += an[n-1] * np.cos(n * w0 * t) + bn[n-1] * np.sin(n * w0 * t)
-    return yM
-
-
-# Fourier Transform 
-
-def simple_fft(y, sample_rate):
-    """
-    Compute one-sided Fourier transform using FFT.
-
-    Args:
-        y (ndarray): Signal samples.
-        sample_rate (float): Sampling rate in Hz.
-
-    Returns:
-        f (ndarray): Frequencies (Hz).
-        amp (ndarray): Amplitude spectrum.
-        phase (ndarray): Phase in radians.
-    """
-    N = len(y)
-    Y = np.fft.rfft(y)
-    f = np.fft.rfftfreq(N, d=1.0 / sample_rate)
-    amp = np.abs(Y) / N
-    if N > 1:
-        amp[1:-1] *= 2.0
-    phase = np.angle(Y)
-    return f, amp, phase 
+    t3 = []
+    for i in range(len(t)):
+        t3.append(alpha*t[i])
+    return np.array(t3), y
