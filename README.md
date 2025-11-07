@@ -14,4 +14,4 @@ Then execute:
 python run.py
 ```
 ## Results of the pytest 
-![image](/pytest_results.png)
+![image](/pytest_result.png)
